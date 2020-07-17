@@ -13,7 +13,7 @@ A-Type and C-Type instructions are supported but not well-tested.
 
 Major limitation: jumps are not yet implemented.
 
-##Example
+## Example
 Add.asm:
 ```
 //Add R0 to R1 and store in R2
