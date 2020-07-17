@@ -16,6 +16,6 @@ message(STATUS "Found LLVM ${LLVM_PACKAGE_VERSION}")
 message(STATUS "Using LLVMConfig.cmake in: ${LLVM_DIR}")
 
 #TODO: clean up the targets and split into lib/example/tests
-add_executable(hack_lifter main.cpp src/BuilderHelper.cpp examples/simple_add_mod.cpp src/ModuleOptimizer.cpp src/ASTTransformer.cpp)
+add_executable(hack_lifter main.cpp src/BuilderHelper.cpp examples/simple_add_mod.cpp src/ModuleTools.cpp src/ASTTransformer.cpp)
 
 target_link_libraries(hack_lifter hack_assembler LLVM)

@@ -8,7 +8,7 @@ namespace hacklift {
     BuilderHelper::BuilderHelper(IRBuilder<> &b, LLVMContext &c) : bldr(b), ctx(c) {}
 
     Value *BuilderHelper::get_constant(int val) {
-        return llvm::ConstantInt::get(IntegerType::getInt32Ty(ctx), val);
+        return llvm::ConstantInt::get(IntegerType::getInt16Ty(ctx), val);
     }
 
     Value *BuilderHelper::ptr_offset(Value *ptr, Value *offset) {
@@ -30,6 +30,24 @@ namespace hacklift {
 
     Value *BuilderHelper::store_to(Value *ptr, Value *val) {
         return bldr.CreateStore(val, ptr);
+    }
+
+    Value *BuilderHelper::get_elem(Value *ptr, int offset) {
+        return deref(ptr_offset(ptr, offset));
+    }
+
+    Value *BuilderHelper::get_elem(Value *ptr, Value *offset) {
+        return deref(ptr_offset(ptr, offset));
+    }
+
+    Value *BuilderHelper::write_elem(Value *ptr, int offset, Value *v) {
+        auto elem = ptr_offset(ptr, offset);
+        return bldr.CreateStore(v, elem);
+    }
+
+    Value *BuilderHelper::write_elem(Value *ptr, Value *offset, Value *v) {
+        auto elem = ptr_offset(ptr, offset);
+        return bldr.CreateStore(v, elem);
     }
 
 }

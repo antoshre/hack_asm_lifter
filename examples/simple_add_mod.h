@@ -35,7 +35,7 @@ inline Module* simple_add_module(LLVMContext& llvm_ctx, std::string module_name,
     auto foo = cast<Function>(foo_func.getCallee());
     auto args = foo->arg_begin();
     Value *Mem = args++;
-    Mem->setName("Mem");
+    Mem->setName("M");
 
     auto entry = BasicBlock::Create(llvm_ctx, "entry", foo);
     IRBuilder<> builder(entry);
@@ -53,7 +53,7 @@ inline Module* simple_add_module(LLVMContext& llvm_ctx, std::string module_name,
     auto _ = builder.CreateSub(R0, R1);
     bhlp.store_to( bhlp.ptr_offset(Mem, 2), res);
 
-    builder.CreateRetVoid();
+    //builder.CreateRetVoid();
 
     verifyFunction(*mod->getFunction(func_name), &llvm::outs());
     return mod;
