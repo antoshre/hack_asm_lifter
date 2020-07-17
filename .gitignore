@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+#Exclude build artifacts
+cmake-build-*
+
+#Exclude CLion project stuff
+.idea
