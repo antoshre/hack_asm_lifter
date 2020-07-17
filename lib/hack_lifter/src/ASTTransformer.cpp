@@ -3,10 +3,10 @@
 //
 
 #include "ASTTransformer.h"
-#include "IREmitter.h"
 
 #include <utility>
 #include <llvm/Support/raw_ostream.h>
+#include <llvm/IR/AssemblyAnnotationWriter.h>
 
 namespace hacklift {
     ASTTransformer::ASTTransformer(hackasm::AST a) : ast(std::move(a)) {
@@ -53,22 +53,23 @@ namespace hacklift {
         */
 
 
-        IREmitter emitter(*this);
-
         for (const hackasm::Instruction &i : ast.listing) {
+            //A-Type instructions
             if (std::holds_alternative<hackasm::A_Type>(i)) {
                 auto &inst = std::get<hackasm::A_Type>(i);
                 state.A = bhlp_ptr->get_constant(inst.s.value);
             }
+            //L-Type instructions
             if (std::holds_alternative<hackasm::L_Type>(i)) {
                 throw std::runtime_error("L-Types not handled yet");
             }
+            //C-Type instructions
             if (std::holds_alternative<hackasm::C_Type>(i)) {
                 auto &inst = std::get<hackasm::C_Type>(i);
 
                 if (inst.dest_mnemonic != "null") {
                     //It's a standard calculation
-                    //dest = comp4
+                    //dest = comp
                     /*
                      * This deserves some explanation.
                      * I want a data structure to hold this clearly-structured data,
@@ -162,14 +163,15 @@ namespace hacklift {
                 }
             }
         }
-
-
-
         //Final return from function
         bldr_ptr->CreateRetVoid();
     }
 
-    ASTTransformer::~ASTTransformer() {
-
+    std::string ASTTransformer::to_llvm_ir() {
+        std::string out;
+        llvm::raw_string_ostream sstream(out);
+        AssemblyAnnotationWriter aaw;
+        this->module->print(sstream, &aaw);
+        return out;
     }
 }

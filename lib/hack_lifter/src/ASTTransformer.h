@@ -31,9 +31,9 @@ namespace hacklift {
 
         std::unordered_map<std::string, BasicBlock*> bblocks;
     public:
-        explicit ASTTransformer(hackasm::AST );
+        explicit ASTTransformer(hackasm::AST);
 
-        ~ASTTransformer();
+        std::string to_llvm_ir();
     };
 }
 
