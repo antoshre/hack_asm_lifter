@@ -13,7 +13,19 @@ A-Type and C-Type instructions are supported but not well-tested.
 
 Major limitation: jumps are not yet implemented.
 
-## Example
+## Build Instructions
+
+Requires C++20.  
+
+Depends on [hack_asm_assembler](https://github.com/antoshre/hack_asm_assembler) as a submodule.  Initialize it (and it's dependencies) by cloning this project and running:
+
+    git submodule update --init --recursive
+
+Requires any relatively recent version of Boost.  Will be removed as a dependency once I get std::ranges working.
+
+Requires LLVM 10.  Currently I build and test on Linux; if you want to build on Windows then godspeed and good luck.
+
+## Example output
 Add.asm:
 ```
 //Add R0 to R1 and store in R2
