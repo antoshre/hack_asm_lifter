@@ -7,6 +7,7 @@
 
 #include "llvm/IR/IRBuilder.h"
 #include "llvm/IR/LLVMContext.h"
+#include "BlockCache.h"
 
 using namespace llvm;
 
@@ -14,35 +15,34 @@ namespace hacklift {
     class BuilderHelper {
         IRBuilder<> &bldr;
         LLVMContext &ctx;
+        BlockCache &bblocks;
 
+        void jump_if(Value*, BasicBlock*);
     public:
-        BuilderHelper(IRBuilder<>& b, LLVMContext& c);
+        BuilderHelper(IRBuilder<>& b, LLVMContext& c, BlockCache& bc);
 
-        //Convert integer constant into LLVM Value* constant
-        Value* get_constant(int);
-        //Access pointer + offset, but does NOT deref it!
-        /*
-         * int arr[64];
-         * //C equivalent of:
-         * auto ptr = (arr+offset);
-         * //Math equivalent of:
-         * auto p = (arr + offset*sizeof(arr[0]))
-         */
-        Value* ptr_offset(Value*, Value*);
-        Value* ptr_offset(Value*, int);
-        Value* deref(Value*);
-        //Get array element
-        Value* get_elem(Value*, int);
-        Value* get_elem(Value*, Value*);
+        //Create an i16 constant
+        Value *i16(int);
 
-        //Write array element
-        Value* write_elem(Value*, int, Value*);
-        Value* write_elem(Value*, Value*, Value*);
+        Value *write_array(Value*, int, Value*);
+        Value *write_array(Value*, Value*, Value*);
+        Value *read_array(Value*, int);
+        Value *read_array(Value*, Value*);
 
-        //same as deref
-        Value* load_from(Value*);
-        Value* store_to(Value*, Value*);
+        //All operations are signed i16 binary ops
+        void JGT(Value*, Value*, BasicBlock*);
+        void JEQ(Value*, Value*, BasicBlock*);
+        void JGE(Value*, Value*, BasicBlock*);
+        void JLT(Value*, Value*, BasicBlock*);
+        void JNE(Value*, Value*, BasicBlock*);
+        void JLE(Value*, Value*, BasicBlock*);
+        void JMP(Value*, Value*, BasicBlock*);
+        void JMP(BasicBlock*);
 
+        Value *op_add(Value*, Value*);
+        Value *op_sub(Value*, Value*);
+        Value *op_not(Value*);
+        Value *op_neg(Value*);
     };
 }
 

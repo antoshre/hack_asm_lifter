@@ -22,7 +22,7 @@ using namespace llvm;
 namespace hacklift {
 
     //TODO: Can all this be static?
-    void do_passes(llvm::Module* module, bool optimize=false, bool print_module=false) {
+    void do_passes(llvm::Module &module, bool optimize = false, bool print_module = false) {
 
 
         //Optimization setup based on https://github.com/bollu/simplexhc-cpp/blob/master/src/main.cpp
@@ -64,81 +64,67 @@ namespace hacklift {
         }
         // We need to run the pipeline once for correctness. Anything after that
         // is optimisation.
-        MPM.run(*module, MAM);
+        MPM.run(module, MAM);
     }
 
-    void optimize_module(llvm::Module* module) {
+    void optimize_module(llvm::Module &module) {
         //Module must be valid for optimization to make sense
-        verifyModule(*module, &llvm::outs());
+        verifyModule(module, &llvm::outs());
         do_passes(module, true, false);
     }
 
-    void print_module(llvm::Module* module) {
+    void print_module(llvm::Module &module) {
         //do_passes(module, false, true);
         AssemblyAnnotationWriter aaw;
-        module->print(llvm::outs(), &aaw);
+        module.print(llvm::outs(), &aaw);
     }
 
-    int run(std::unique_ptr<Module>& module, std::unique_ptr<LLVMContext>& ctx, const std::string& func_name) {
+    int run(std::unique_ptr<Module> mod, std::unique_ptr<LLVMContext> ctx, const std::string &fname,
+            std::array<int16_t, 16> &mem) {
+        InitializeNativeTarget();
+        InitializeNativeTargetAsmPrinter();
+        InitializeNativeTargetAsmParser();
 
-    //InitLLVM X{1,""};
-    InitializeNativeTarget();
-    InitializeNativeTargetAsmPrinter();
-    InitializeNativeTargetAsmParser();
+        // Try to detect the host arch and construct an LLJIT instance.
+        auto JIT = orc::LLJITBuilder().create();
 
-    auto tsm = orc::ThreadSafeModule(std::move(module), std::move(ctx));
+        // If we could not construct an instance, return an error.
+        if (!JIT) {
+            llvm::errs() << JIT.takeError();
+            return -1;
+        }
 
-    auto JIT = orc::LLJITBuilder().create();
-    if (!JIT) {
-        llvm::outs() << JIT.takeError();
-        return -1;
-    }
+        // Add the module.
+        if (auto err = JIT->get()->addIRModule(orc::ThreadSafeModule(std::move(mod), std::move(ctx)))) {
+            llvm::errs() << err;
+            return -2;
+        }
+        // Look up the JIT'd code entry point.
+        auto sym = JIT->get()->lookup("f");
+        if (!sym) {
+            llvm::errs() << sym.takeError();
+            return -3;
+        }
 
-    if (auto err = JIT->get()->addIRModule(std::move(tsm))) {
-        llvm::outs() << err;
-        return -2;
-    }
+        auto f = (int16_t(*)(int16_t *)) sym.get().getAddress();
 
-    auto fsym = JIT->get()->lookup("foo");
-    if (!fsym) {
-        llvm::outs() << fsym.takeError();
-        return -3;
-    }
-    auto f = (void (*)(int16_t*)) fsym.get().getAddress();
-    int16_t mem[16];
-    std::memset(mem, 0, sizeof(mem));
-
-    mem[0] = 42;
-    mem[1] = -2;
-    std::cout << "Memory before run:\n";
-    for(int i=0; i < 16; i++) {
-        std::cout << std::hex << std::setw(4) << std::setfill('0') <<  mem[i] << ' ';
-    }
-    std::cout << '\n';
-    f(mem);
-
-    std::cout << "Memory after run:\n";
-        for(int i=0; i < 16; i++) {
-            std::cout << std::hex << std::setw(4) << std::setfill('0') <<  mem[i] << ' ';
+        std::cout << "Memory before run:\n";
+        for (int i = 0; i < 16; i++) {
+            std::cout << std::hex << std::setw(4) << std::setfill('0') << mem[i] << ' ';
         }
         std::cout << '\n';
+        int16_t ret_val = f(mem.data());
 
-        /*
-    int16_t Mem[16];
-    std::memset(Mem, 0, sizeof(Mem));
-    Mem[0] = 4;
-    Mem[1] = 5;
-    std::cout << "Starting Mem:\n";
-    for(int i=0; i < 16; i++) {
-        std::cout << std::hex << std::setw(2) << Mem[i] << ' ';
-    }
-    std::cout << "\nCalling foo(Mem)\n";
-    f(Mem);
-    */
-        return 0;
+        std::cout << "Memory after run:\n";
+        for (int i = 0; i < 16; i++) {
+            std::cout << std::hex << std::setw(4) << std::setfill('0') << mem[i] << ' ';
+        }
+        std::cout << "\nReturned: " << std::hex << ret_val << '\n';
+        return ret_val;
     }
 
-    void verify_module(llvm::Module *module) {
-        verifyModule(*module, &llvm::outs());
+    void verify_module(llvm::Module &module) {
+        verifyModule(module, &llvm::outs());
     }
 }
+

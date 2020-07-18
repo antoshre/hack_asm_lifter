@@ -8,10 +8,12 @@ find_package(LLVM REQUIRED CONFIG)
 #message(STATUS "Found LLVM ${LLVM_PACKAGE_VERSION}")
 #message(STATUS "Using LLVMConfig.cmake in: ${LLVM_DIR}")
 
-set(SOURCES hack_lifter/src/ASTTransformer.cpp
+set(SOURCES
         hack_lifter/src/BuilderHelper.cpp
         hack_lifter/src/ModuleTools.cpp
-        )
+        hack_lifter/src/IREmitter.cpp
+        hack_lifter/src/BlockCache.cpp
+        hack_lifter/testing/create_function.cpp hack_lifter/testing/create_function.h)
 
 add_library(hack_lifter ${SOURCES})
 target_link_libraries(hack_lifter PUBLIC hack_assembler LLVM)
