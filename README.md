@@ -1,5 +1,5 @@
 # hack_asm_lifter
-Hack assembly to LLVM IR lifter
+### LLVM IR Static Recompiler for Hack Assembly
 
 Hack is a toy assembly language created for the [nand2tetris](https://www.nand2tetris.org/) course.  The simple nature of the language makes it ideal for experimenting with building LLVM IR.
 
