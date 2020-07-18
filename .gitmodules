@@ -1,0 +1,3 @@
+[submodule "external/hackasm"]
+	path = external/hackasm
+	url = https://github.com/antoshre/hack_asm_assembler
