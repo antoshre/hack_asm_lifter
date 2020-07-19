@@ -13,7 +13,7 @@ set(SOURCES
         hack_lifter/src/ModuleTools.cpp
         hack_lifter/src/IREmitter.cpp
         hack_lifter/src/BlockCache.cpp
-        hack_lifter/testing/create_function.cpp hack_lifter/testing/create_function.h)
+        hack_lifter/testing/create_void_function.cpp hack_lifter/testing/create_void_function.h hack_lifter/src/BlockMap.cpp hack_lifter/src/BlockMap.h hack_lifter/testing/parse_asm.cpp)
 
 add_library(hack_lifter ${SOURCES})
 target_link_libraries(hack_lifter PUBLIC hack_assembler LLVM)

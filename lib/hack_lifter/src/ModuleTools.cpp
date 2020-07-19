@@ -69,7 +69,7 @@ namespace hacklift {
 
     void optimize_module(llvm::Module &module) {
         //Module must be valid for optimization to make sense
-        verifyModule(module, &llvm::outs());
+        //verifyModule(module, &llvm::outs());
         do_passes(module, true, false);
     }
 
@@ -79,8 +79,52 @@ namespace hacklift {
         module.print(llvm::outs(), &aaw);
     }
 
-    int run(std::unique_ptr<Module> mod, std::unique_ptr<LLVMContext> ctx, const std::string &fname,
-            std::array<int16_t, 16> &mem) {
+    //TODO: de-duplicate these run functions.  Dynamically detect signature?  Template and forget?
+    void run_void_func(std::unique_ptr<Module> mod, std::unique_ptr<LLVMContext> ctx, const std::string &fname,
+                       std::array<int16_t, 32768> &mem) {
+        InitializeNativeTarget();
+        InitializeNativeTargetAsmPrinter();
+        InitializeNativeTargetAsmParser();
+
+        // Try to detect the host arch and construct an LLJIT instance.
+        auto JIT = orc::LLJITBuilder().create();
+
+        // If we could not construct an instance, return an error.
+        if (!JIT) {
+            llvm::errs() << JIT.takeError();
+            return;
+        }
+
+        // Add the module.
+        if (auto err = JIT->get()->addIRModule(orc::ThreadSafeModule(std::move(mod), std::move(ctx)))) {
+            llvm::errs() << err;
+            return;
+        }
+        // Look up the JIT'd code entry point.
+        auto sym = JIT->get()->lookup("f");
+        if (!sym) {
+            llvm::errs() << sym.takeError();
+            return;
+        }
+
+        auto f = (void (*)(int16_t *)) sym.get().getAddress();
+
+        std::cout << "Memory before run:\n";
+        for (int i = 0; i < 16; i++) {
+            std::cout << std::hex << std::setw(4) << std::setfill('0') << mem[i] << ' ';
+        }
+        std::cout << '\n';
+        //int16_t ret_val = f(mem.data());
+        f(mem.data());
+
+        std::cout << "Memory after run:\n";
+        for (int i = 0; i < 16; i++) {
+            std::cout << std::hex << std::setw(4) << std::setfill('0') << mem[i] << ' ';
+        }
+    }
+
+    int16_t run_int16_func(std::unique_ptr<Module> mod, std::unique_ptr<LLVMContext> ctx, const std::string &fname,
+                           std::array<int16_t, 16> &mem) {
         InitializeNativeTarget();
         InitializeNativeTargetAsmPrinter();
         InitializeNativeTargetAsmParser();
@@ -119,12 +163,15 @@ namespace hacklift {
         for (int i = 0; i < 16; i++) {
             std::cout << std::hex << std::setw(4) << std::setfill('0') << mem[i] << ' ';
         }
-        std::cout << "\nReturned: " << std::hex << ret_val << '\n';
+        //std::cout << "\nReturned: " << std::hex << ret_val << '\n';
+        //return ret_val;
         return ret_val;
     }
 
     void verify_module(llvm::Module &module) {
-        verifyModule(module, &llvm::outs());
+        if (verifyModule(module, &llvm::outs())) {
+            throw std::runtime_error("Module failed to verify.");
+        }
     }
 }
 

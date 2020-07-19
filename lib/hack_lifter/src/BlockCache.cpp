@@ -11,11 +11,9 @@ namespace hacklift {
 
     BasicBlock *BlockCache::operator[](const std::string &s) {
         if (blocks.find(s) != blocks.end()) {
-            std::cout << "[BlockCache] BBlock found: " << s << '\n';
             return blocks[s];
         } else {
             if (!locked) {
-                std::cout << "[BlockCache] BBlock added: " << s << '\n';
                 auto it = blocks.emplace(s, BasicBlock::Create(ctx, s, &func));
                 return it.first->second;
             } else {

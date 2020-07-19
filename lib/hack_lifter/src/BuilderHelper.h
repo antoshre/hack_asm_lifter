@@ -12,14 +12,15 @@
 using namespace llvm;
 
 namespace hacklift {
-    class BuilderHelper {
+    struct BuilderHelper {
         IRBuilder<> &bldr;
         LLVMContext &ctx;
         BlockCache &bblocks;
 
-        void jump_if(Value*, BasicBlock*);
+        void jump_if(Value *, BasicBlock *);
+
     public:
-        BuilderHelper(IRBuilder<>& b, LLVMContext& c, BlockCache& bc);
+        BuilderHelper(IRBuilder<> &b, LLVMContext &c, BlockCache &bc);
 
         //Create an i16 constant
         Value *i16(int);
@@ -34,15 +35,27 @@ namespace hacklift {
         void JEQ(Value*, Value*, BasicBlock*);
         void JGE(Value*, Value*, BasicBlock*);
         void JLT(Value*, Value*, BasicBlock*);
-        void JNE(Value*, Value*, BasicBlock*);
-        void JLE(Value*, Value*, BasicBlock*);
-        void JMP(Value*, Value*, BasicBlock*);
-        void JMP(BasicBlock*);
 
-        Value *op_add(Value*, Value*);
-        Value *op_sub(Value*, Value*);
-        Value *op_not(Value*);
-        Value *op_neg(Value*);
+        void JNE(Value *, Value *, BasicBlock *);
+
+        void JLE(Value *, Value *, BasicBlock *);
+
+        //Unconditional jump takes values to maintain same signature as other jump types
+        void JMP(Value *, Value *, BasicBlock *);
+
+        void JMP(BasicBlock *);
+
+        Value *op_add(Value *, Value *);
+
+        Value *op_sub(Value *, Value *);
+
+        Value *op_not(Value *);
+
+        Value *op_neg(Value *);
+
+        Value *op_and(Value *, Value *);
+
+        Value *op_or(Value *, Value *);
     };
 }
 
