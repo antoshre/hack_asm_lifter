@@ -12,7 +12,8 @@
 using namespace llvm;
 
 namespace hacklift {
-    //Maps Value* labels to BasicBlocks.
+    //Maps int16_t instruction positions to BasicBlocks.
+    //Required for translating jump offsets to BasicBlocks.
     class BlockMap {
         std::unordered_map<int16_t, BasicBlock *> map;
 
