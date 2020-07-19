@@ -28,11 +28,12 @@ namespace hacklift {
     void IREmitter::operator()(const hackasm::C_Type &i) {
         //All C-types have a comp section, so handle that first
         Value *comp = nullptr;
-        if (comp_values.find(i.comp_mnemonic) != comp_values.end()) {
-            comp = comp_values[i.comp_mnemonic](this);
+        std::string comp_str(i.comp_mnemonic);
+        if (comp_values.find(comp_str) != comp_values.end()) {
+            comp = comp_values[comp_str](this);
 
         } else {
-            throw std::runtime_error("Unhandled comp mnemonic: " + i.comp_mnemonic);
+            throw std::runtime_error("Unhandled comp mnemonic: " + comp_str);
         }
 
         if (i.dest_mnemonic != "null") {
@@ -51,7 +52,7 @@ namespace hacklift {
                 h.write_array(m.M, m.A, comp);
             } else {
                 //How?
-                throw std::runtime_error("Unhandled dest mnemonic: " + i.dest_mnemonic);
+                throw std::runtime_error("Unhandled dest mnemonic: " + std::string(i.dest_mnemonic));
             }
         } else {
             //Oh lord it's a jump.

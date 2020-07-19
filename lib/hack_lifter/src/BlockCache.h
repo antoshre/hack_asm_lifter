@@ -14,13 +14,17 @@ using namespace llvm;
 
 namespace hacklift {
     class BlockCache {
-        std::unordered_map<std::string, BasicBlock*> blocks{};
-        LLVMContext& ctx;
-        Function& func;
+        std::unordered_map<std::string, BasicBlock *> blocks{};
+        LLVMContext &ctx;
+        Function &func;
         bool locked = false;
+
+
     public:
-        BlockCache(LLVMContext&, Function&);
-        BasicBlock* operator[](const std::string&);
+        BlockCache(LLVMContext &, Function &);
+
+        //BasicBlock* operator[](const std::string&);
+        BasicBlock *operator[](std::string_view);
 
         //Prevent the creation of new basic blocks.
         void lock();
