@@ -5,21 +5,27 @@ Hack is a toy assembly language created for the [nand2tetris](https://www.nand2t
 
 The purpose of this project is to read in a Hack assembly file and convert it into LLVM IR.
 
+This project relies on my [hackasm](https://github.com/antoshre/hack_asm_assembler) assembler.
+
 ## Installation
 
 Clone the repo, grab the submodules with `git submodule update --init --recursive`
 
 ## Requirements 
 
-Requires C++20.  
-
-Requires any relatively recent version of Boost.  Will be removed as a dependency once I get std::ranges working.
+Requires C++20 for std::ranges used in [hackasm](https://github.com/antoshre/hack_asm_assembler) to assemble the AST.
 
 Requires LLVM 10.  Currently I build and test on Linux; if you want to build on Windows then godspeed and good luck.
 
 ## Usage
 
-See `examples/translate_asm.cpp` for a (mostly) functional demo.  `lib/src/IREmitter.cpp` is the business-end of the translation.
+See
+[`examples/translate_asm.cpp`](https://github.com/antoshre/hack_asm_lifter/blob/master/examples/translate_asm.cpp)
+for a (mostly) functional demo.
+[`lib/hack_lifter/src/IREmitter.cpp`](https://github.com/antoshre/hack_asm_lifter/blob/master/lib/hack_lifter/src/IREmitter.cpp)
+and
+[`lib/hack_lifter/src/BuilderHelper.cpp`](https://github.com/antoshre/hack_asm_lifter/blob/master/lib/hack_lifter/src/BuilderHelper.cpp)
+are the business-end of the translation.
 
 ## Hack Instruction Support
 
