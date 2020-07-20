@@ -13,7 +13,7 @@ Clone the repo, grab the submodules with `git submodule update --init --recursiv
 
 ## Requirements 
 
-Requires C++20 for std::ranges used in [hackasm](https://github.com/antoshre/hack_asm_assembler) to assemble the AST.
+Requires C++20 for std::ranges and [CTRE](https://github.com/hanickadot/compile-time-regular-expressions) used in [hackasm](https://github.com/antoshre/hack_asm_assembler) to assemble the AST.
 
 Requires LLVM 10.  Currently I build and test on Linux; if you want to build on Windows then godspeed and good luck.
 
