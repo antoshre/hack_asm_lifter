@@ -29,73 +29,111 @@ namespace hacklift {
                     return p->h.i16(-1);
                 }},
                 {"D",   [](auto p) {
-                    return p->m.D;
+                    Value *D = p->h.bldr.CreateLoad(p->m.D);
+                    return D;
                 }},
                 {"A",   [](auto p) {
+                    //Value *A = p->h.bldr.CreateLoad(p->m.A);
+                    //return A;
                     return p->m.A;
                 }},
                 {"!D",  [](auto p) {
-                    return p->h.op_not(p->m.D);
+                    Value *D = p->h.bldr.CreateLoad(p->m.D);
+                    return p->h.op_not(D);
                 }},
                 {"-D",  [](auto p) {
-                    return p->h.op_neg(p->m.D);
+                    Value *D = p->h.bldr.CreateLoad(p->m.D);
+                    return p->h.op_neg(D);
                 }},
                 {"-A",  [](auto p) {
+                    //Value *A = p->h.bldr.CreateLoad(p->m.A);
+                    //return p->h.op_neg(A);
                     return p->h.op_neg(p->m.A);
                 }},
                 {"D+1", [](auto p) {
-                    return p->h.op_add(p->m.D, p->h.i16(1));
+                    Value *D = p->h.bldr.CreateLoad(p->m.D);
+                    return p->h.op_add(D, p->h.i16(1));
                 }},
                 {"A+1", [](auto p) {
+                    //Value *A = p->h.bldr.CreateLoad(p->m.A);
+                    //return p->h.op_add(A, p->h.i16(1));
                     return p->h.op_add(p->m.A, p->h.i16(1));
                 }},
                 {"D-1", [](auto p) {
-                    return p->h.op_sub(p->m.D, p->h.i16(1));
+                    Value *D = p->h.bldr.CreateLoad(p->m.D);
+                    return p->h.op_sub(D, p->h.i16(1));
                 }},
                 {"A-1", [](auto p) {
+                    //Value *A = p->h.bldr.CreateLoad(p->m.A);
+                    //return p->h.op_sub(A, p->h.i16(1));
                     return p->h.op_sub(p->m.A, p->h.i16(1));
                 }},
                 {"D+A", [](auto p) {
-                    return p->h.op_add(p->m.D, p->m.A);
+                    //Value *A = p->h.bldr.CreateLoad(p->m.A);
+                    Value *D = p->h.bldr.CreateLoad(p->m.D);
+                    return p->h.op_add(D, p->m.A);
                 }},
                 {"D-A", [](auto p) {
-                    return p->h.op_sub(p->m.D, p->m.A);
+                    //Value *A = p->h.bldr.CreateLoad(p->m.A);
+                    Value *D = p->h.bldr.CreateLoad(p->m.D);
+                    return p->h.op_sub(D, p->m.A);
                 }},
                 {"A-D", [](auto p) {
-                    return p->h.op_sub(p->m.A, p->m.D);
+                    //Value *A = p->h.bldr.CreateLoad(p->m.A);
+                    Value *D = p->h.bldr.CreateLoad(p->m.D);
+                    return p->h.op_sub(p->m.A, p->m.A);
                 }},
+
                 {"D&A", [](auto p) {
-                    return p->h.op_and(p->m.D, p->m.A);
+                    //Value *A = p->h.bldr.CreateLoad(p->m.A);
+                    Value *D = p->h.bldr.CreateLoad(p->m.D);
+                    return p->h.op_and(D, p->m.A);
                 }},
                 {"D|A", [](auto p) {
-                    return p->h.op_or(p->m.D, p->m.A);
+                    //Value *A = p->h.bldr.CreateLoad(p->m.A);
+                    Value *D = p->h.bldr.CreateLoad(p->m.D);
+                    return p->h.op_or(D, p->m.A);
                 }},
                 {"D|M", [](auto p) {
-                    return p->h.op_or(p->m.D, p->h.read_array(p->m.M, p->m.A));
+                    //Value *A = p->h.bldr.CreateLoad(p->m.A);
+                    Value *D = p->h.bldr.CreateLoad(p->m.D);
+                    return p->h.op_or(D, p->h.read_array(p->m.MEM, p->m.A));
                 }},
                 {"D&M", [](auto p) {
-                    return p->h.op_and(p->m.D, p->h.read_array(p->m.M, p->m.A));
+                    //Value *A = p->h.bldr.CreateLoad(p->m.A);
+                    Value *D = p->h.bldr.CreateLoad(p->m.D);
+                    return p->h.op_and(D, p->h.read_array(p->m.MEM, p->m.A));
                 }},
                 {"M-D", [](auto p) {
-                    return p->h.op_sub(p->h.read_array(p->m.M, p->m.A), p->m.D);
+                    //Value *A = p->h.bldr.CreateLoad(p->m.A);
+                    Value *D = p->h.bldr.CreateLoad(p->m.D);
+                    return p->h.op_sub(p->h.read_array(p->m.MEM, p->m.A), D);
                 }},
                 {"D-M", [](auto p) {
-                    return p->h.op_sub(p->m.D, p->h.read_array(p->m.M, p->m.A));
+                    //Value *A = p->h.bldr.CreateLoad(p->m.A);
+                    Value *D = p->h.bldr.CreateLoad(p->m.D);
+                    return p->h.op_sub(D, p->h.read_array(p->m.MEM, p->m.A));
                 }},
                 {"D+M", [](auto p) {
-                    return p->h.op_add(p->m.D, p->h.read_array(p->m.M, p->m.A));
+                    //Value *A = p->h.bldr.CreateLoad(p->m.A);
+                    Value *D = p->h.bldr.CreateLoad(p->m.D);
+                    return p->h.op_add(D, p->h.read_array(p->m.MEM, p->m.A));
                 }},
                 {"M-1", [](auto p) {
-                    return p->h.op_sub(p->h.read_array(p->m.M, p->m.A), p->h.i16(-1));
+                    //Value *A = p->h.bldr.CreateLoad(p->m.A);
+                    return p->h.op_sub(p->h.read_array(p->m.MEM, p->m.A), p->h.i16(-1));
                 }},
                 {"-M",  [](auto p) {
-                    return p->h.op_neg(p->h.read_array(p->m.M, p->m.A));
+                    //Value *A = p->h.bldr.CreateLoad(p->m.A);
+                    return p->h.op_neg(p->h.read_array(p->m.MEM, p->m.A));
                 }},
                 {"!M",  [](auto p) {
-                    return p->h.op_not(p->h.read_array(p->m.M, p->m.A));
+                    //Value *A = p->h.bldr.CreateLoad(p->m.A);
+                    return p->h.op_not(p->h.read_array(p->m.MEM, p->m.A));
                 }},
                 {"M",   [](auto p) {
-                    return p->h.read_array(p->m.M, p->m.A);
+                    //Value *A = p->h.bldr.CreateLoad(p->m.A);
+                    return p->h.read_array(p->m.MEM, p->m.A);
                 }}
         };
 

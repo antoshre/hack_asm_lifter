@@ -9,7 +9,7 @@
 
 namespace hacklift {
     struct HackMachineState {
-        Value *A, *D, *M;
+        Value *A, *D, *M, *MEM;
     };
 }
 

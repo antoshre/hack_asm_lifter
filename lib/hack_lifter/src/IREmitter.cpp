@@ -2,6 +2,7 @@
 // Created by rob on 7/17/20.
 //
 
+#include <llvm/Support/raw_ostream.h>
 #include "IREmitter.h"
 
 namespace hacklift {
@@ -9,7 +10,11 @@ namespace hacklift {
     IREmitter::IREmitter(HackMachineState &_m, BlockMap &_b, BuilderHelper &_h) : h(_h), bmap(_b), m(_m) {}
 
     void IREmitter::operator()(const hackasm::A_Type &i) {
-        m.A = h.i16(i.s.value);
+        auto c = h.i16(i.s.value);
+        m.A = c;
+        //h.bldr.CreateLoad(m.A);
+        //h.bldr.CreateStore(c, m.A);
+        //m.A = h.i16(i.s.value);
     }
 
     void IREmitter::operator()(const hackasm::L_Type &i) {
@@ -43,13 +48,20 @@ namespace hacklift {
             Value *dest;
             if (i.dest_mnemonic.find('A') != std::string::npos) {
                 //set register A to comp
+                //auto temp = h.bldr.CreateLoad(m.A);
+                //h.bldr.CreateStore(comp, m.A);
                 m.A = comp;
             } else if (i.dest_mnemonic.find('D') != std::string::npos) {
                 //set register D to comp
-                m.D = comp;
+                //auto temp = h.bldr.CreateLoad(m.D);
+                //auto temp2 = h.bldr.CreateStore(comp, temp);
+                h.bldr.CreateStore(comp, m.D);
+                //m.D = comp;
             } else if (i.dest_mnemonic.find('M') != std::string::npos) {
                 //write comp to MEM[A}
-                h.write_array(m.M, m.A, comp);
+                //auto temp = m.M = h.read_array(m.MEM, m.A);
+                //Value *A = h.bldr.CreateLoad(m.A);
+                h.write_array(m.MEM, m.A, comp);
             } else {
                 //How?
                 throw std::runtime_error("Unhandled dest mnemonic: " + std::string(i.dest_mnemonic));
@@ -61,8 +73,19 @@ namespace hacklift {
             // if (D > 0): goto Label(A)
 
             //BasicBlock* target = bmap[m.A]; //look up target in Value -to- Label-BB map
-            auto *cint = dyn_cast<ConstantInt>(m.A);
-            int16_t val = cint->getSExtValue();
+            //Value* temp = h.bldr.CreateLoad(m.A)->getPointerOperand();
+            //Value *temp = h.bldr.CreateLoad(m.A);
+            Value *temp = m.A;
+            temp->print(llvm::outs(), true);
+            llvm::outs() << temp->getName() << '\n';
+            int16_t val;
+            if (isa<ConstantInt>(temp)) {
+                auto *cint = dyn_cast<ConstantInt>(temp);
+                val = cint->getSExtValue();
+            } else {
+                throw std::runtime_error("A isn't a ConstantInt");
+            }
+
             std::cout << "Branch target is #" << val << '\n';
             BasicBlock *target = bmap[val];
 

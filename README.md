@@ -96,7 +96,12 @@ are the business-end of the translation.
 
 A-Type and non-branching C-Type instructions are implemented and reasonably solid.
 
-Branch/jump support is extremely limited.  LLVM's SSA form means some major branch analysis is required to fully support branching and I haven't cracked that nut yet.
+~~Branch/jump support is extremely limited.  LLVM's SSA form means some major branch analysis is required to fully support branching and I haven't cracked that nut yet.~~
+
+Branching support is in, though I need more programs and a better way to test for regressions.  SSA limitations worked around by
+running all access to 'D' register through memory, which is apparently a common trick used by LLVM itself for this same reason.
+
+The upshot is the unoptimized IR will have a ton of loads and stores that are blown away by optimization.
 
 ## Example Output
 

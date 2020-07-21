@@ -27,8 +27,13 @@ namespace hacklift {
         HackMachineState state{};
 
         auto foo_args = foo->arg_begin();
-        state.M = foo_args++;
-        state.M->setName("MEM");
+        state.MEM = foo_args++;
+        state.MEM->setName("MEM");
+
+        //state.A = b.CreateAlloca(IntegerType::getInt16Ty(ctx), nullptr, "A");
+        //state.A = h.i16(0);
+        state.D = b.CreateAlloca(IntegerType::getInt16Ty(ctx), nullptr, "D");
+        state.M = b.CreateAlloca(IntegerType::getInt16Ty(ctx), nullptr, "M");
 
         auto symbols = ast.get_symbol_table();
 
