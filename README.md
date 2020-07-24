@@ -6,6 +6,17 @@ Hack is a toy assembly language created for the [nand2tetris](https://www.nand2t
 The purpose of this project is to read in a Hack assembly file and convert it into LLVM IR.
 
 This project relies on my [hackasm](https://github.com/antoshre/hack_asm_assembler) assembler.
+ 
+### Todo:
+* Handle keyboard input
+* Handle emulated screen output
+
+Keyboard is going to be significantly easier because it's a single memory offset.  Every read can be instrumented to update from the
+real keyboard.
+
+The screen is going to be much more difficult.  Not sure if I'll update the output on every write and accept a whole lot of frame updates,
+or update asynchronously on a separate thread every X milliseconds.  The Hack platform doesn't specify anything like a 
+horizontal or vertical blanking period to indicate the screen has been updated and a frame is complete.
 
 ## Installation
 
@@ -94,7 +105,10 @@ are the business-end of the translation.
 
 ## Hack Instruction Support
 
-A-Type and non-branching C-Type instructions are implemented and reasonably solid.
+All instruction types are implemented, though testing needs to be implemented.  The framework is in but the implementation is tricky.  
+Testing for functional equivalence on a per-instruction basis is largely impossible, the vast majority of the issues I've
+encountered are from multiple instruction interactions.
+
 
 ~~Branch/jump support is extremely limited.  LLVM's SSA form means some major branch analysis is required to fully support branching and I haven't cracked that nut yet.~~
 
