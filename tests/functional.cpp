@@ -15,8 +15,7 @@ TEST(AddAsm, Functionality) {
     //Check that M[2] = M[0] + M[1], no other change in memory
     std::ifstream file("../../examples/Add.asm", std::ios::in);
 
-    hackasm::AsmFile asmfile(file);
-    hackasm::AST ast(asmfile);
+    hackasm::AST ast(file);
 
     auto ctx = std::make_unique<llvm::LLVMContext>();
     auto mod = std::make_unique<llvm::Module>("module", *ctx);

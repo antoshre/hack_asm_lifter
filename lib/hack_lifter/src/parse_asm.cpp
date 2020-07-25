@@ -53,7 +53,7 @@ namespace hacklift {
             blockmap.emplace(loc, bblocks[label]);
         }
 
-        IREmitter emitter(state, blockmap, h);
+        IREmitter emitter(state, blockmap, h, ast);
         for (const hackasm::Instruction &inst : ast.get_listing()) {
             std::visit(emitter, inst);
         }

@@ -10,6 +10,7 @@
 #include "hackasm/Instruction.h"
 #include "HackMachineState.h"
 #include "BlockMap.h"
+#include "hackasm/AST.h"
 
 namespace hacklift {
 
@@ -17,6 +18,7 @@ namespace hacklift {
         HackMachineState &m;
         BlockMap &bmap;
         BuilderHelper &h;
+        const hackasm::AST &ast;
 
         std::unordered_map<std::string, Value *(*)(IREmitter *)> comp_values = {
                 {"0",   [](auto p) {
@@ -138,13 +140,15 @@ namespace hacklift {
         };
 
     public:
-        explicit IREmitter(HackMachineState &, BlockMap &, BuilderHelper &);
+        explicit IREmitter(HackMachineState &, BlockMap &, BuilderHelper &, const hackasm::AST &);
 
         void operator()(const hackasm::A_Type &);
 
         void operator()(const hackasm::L_Type &);
 
         void operator()(const hackasm::C_Type &);
+
+        void operator()(const hackasm::B_Type &);
     };
 
 

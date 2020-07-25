@@ -31,8 +31,7 @@ int main(int argc, char **argv) {
     /*
      * See github.com/antoshre/hack_asm_assembler for details.
      */
-    hackasm::AsmFile asmfile(file);
-    hackasm::AST ast(asmfile);
+    hackasm::AST ast(file);
 
     auto ctx = std::make_unique<LLVMContext>();
     auto mod = std::make_unique<Module>("module", *ctx);

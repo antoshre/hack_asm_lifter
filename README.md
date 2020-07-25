@@ -9,14 +9,13 @@ This project relies on my [hackasm](https://github.com/antoshre/hack_asm_assembl
  
 ### Todo:
 * Handle keyboard input
+    - Stubs inserted for handling keyboard. Still need a cross-platform way to handle non-blocking terminal I/O.
 * Handle emulated screen output
+    - Screen stub inserted, not yet hooked up.
 
-Keyboard is going to be significantly easier because it's a single memory offset.  Every read can be instrumented to update from the
-real keyboard.
-
-The screen is going to be much more difficult.  Not sure if I'll update the output on every write and accept a whole lot of frame updates,
-or update asynchronously on a separate thread every X milliseconds.  The Hack platform doesn't specify anything like a 
-horizontal or vertical blanking period to indicate the screen has been updated and a frame is complete.
+Because writing to the screen memory is generally done with computed jumps and I can't support that statically,
+screen output likely won't be instrumented at the instruction level.  I'll spin up a thread and copy out the contents every few milliseconds
+and live with that for the foreseeable future.
 
 ## Installation
 
@@ -44,8 +43,7 @@ if (!file) {
 /*
  * See github.com/antoshre/hack_asm_assembler for details.
  */
-hackasm::AsmFile asmfile(file);
-hackasm::AST ast(asmfile);
+hackasm::AST ast(file);
 
 auto ctx = std::make_unique<LLVMContext>();
 auto mod = std::make_unique<Module>("module", *ctx);

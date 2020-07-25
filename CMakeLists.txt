@@ -14,5 +14,6 @@ endif ()
 
 option(BUILD_TESTS "Build tests" ON)
 if (BUILD_TESTS)
+    add_subdirectory(external/googletest)
     add_subdirectory(tests)
 endif ()
