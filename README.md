@@ -101,20 +101,6 @@ and
 [`lib/hack_lifter/src/BuilderHelper.cpp`](https://github.com/antoshre/hack_asm_lifter/blob/master/lib/hack_lifter/src/BuilderHelper.cpp)
 are the business-end of the translation.
 
-## Hack Instruction Support
-
-All instruction types are implemented, though testing needs to be implemented.  The framework is in but the implementation is tricky.  
-Testing for functional equivalence on a per-instruction basis is largely impossible, the vast majority of the issues I've
-encountered are from multiple instruction interactions.
-
-
-~~Branch/jump support is extremely limited.  LLVM's SSA form means some major branch analysis is required to fully support branching and I haven't cracked that nut yet.~~
-
-Branching support is in, though I need more programs and a better way to test for regressions.  SSA limitations worked around by
-running all access to 'D' register through memory, which is apparently a common trick used by LLVM itself for this same reason.
-
-The upshot is the unoptimized IR will have a ton of loads and stores that are blown away by optimization.
-
 ## Example Output
 
 Memory is modeled as an int16[] passed as a parameter to allow data transfer into and out of the function.
@@ -155,3 +141,16 @@ Memory after run:
 0032 0055 0087 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 
 ```
 
+## Hack Instruction Support
+
+All instruction types are implemented, though testing needs to be implemented.  The framework is in but the implementation is tricky.  
+Testing for functional equivalence on a per-instruction basis is largely impossible, the vast majority of the issues I've
+encountered are from multiple instruction interactions.
+
+
+~~Branch/jump support is extremely limited.  LLVM's SSA form means some major branch analysis is required to fully support branching and I haven't cracked that nut yet.~~
+
+Branching support is in, though I need more programs and a better way to test for regressions.  SSA limitations worked around by
+running all access to 'D' register through memory, which is apparently a common trick used by LLVM itself for this same reason.
+
+The upshot is the unoptimized IR will have a ton of loads and stores that are blown away by optimization.
