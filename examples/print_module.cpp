@@ -6,8 +6,8 @@
 #include <string>
 #include <array>
 #include <llvm/Support/raw_ostream.h>
-#include "../lib/hack_lifter/testing/create_void_function.h"
-#include "../src/ModuleTools.h"
+#include "hacklift/create_void_function.h"
+#include "../lib/hack_lifter/include/ModuleTools.h"
 #include "llvm/ExecutionEngine/Orc/ThreadSafeModule.h"
 
 using namespace llvm;

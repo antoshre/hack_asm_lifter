@@ -2,7 +2,7 @@
 // Created by rob on 7/16/2020.
 //
 
-#include "BuilderHelper.h"
+#include "hacklift/BuilderHelper.h"
 
 namespace hacklift {
     BuilderHelper::BuilderHelper(IRBuilder<> &b, LLVMContext &c, BlockCache& bc) : bldr(b), ctx(c), bblocks(bc) {}

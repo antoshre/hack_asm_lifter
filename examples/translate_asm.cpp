@@ -7,10 +7,10 @@
 #include <array>
 #include <fstream>
 #include <llvm/Support/raw_ostream.h>
-#include "../lib/hack_lifter/testing/create_void_function.h"
-#include "../src/ModuleTools.h"
+#include "hacklift/create_void_function.h"
+#include "hacklift/ModuleTools.h"
 #include "hackasm/AsmFile.h"
-#include "../lib/hack_lifter/testing/parse_asm.h"
+#include "hacklift/parse_asm.h"
 
 using namespace llvm;
 

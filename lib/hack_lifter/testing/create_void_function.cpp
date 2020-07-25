@@ -2,14 +2,14 @@
 // Created by rob on 7/18/20.
 //
 
-#include "create_void_function.h"
+#include "hacklift/create_void_function.h"
 
-#include "BlockCache.h"
-#include "BuilderHelper.h"
+#include "hacklift/BlockCache.h"
+#include "hacklift/BuilderHelper.h"
 #include "llvm/IR/IRBuilder.h"
 #include "llvm/ExecutionEngine/ExecutionEngine.h"
 #include <iostream>
-#include <HackMachineState.h>
+#include "hacklift/HackMachineState.h"
 
 namespace hacklift {
 
@@ -29,8 +29,8 @@ namespace hacklift {
         HackMachineState state{};
 
         auto foo_args = foo->arg_begin();
-        state.M = foo_args++;
-        state.M->setName("MEM");
+        state.MEM = foo_args++;
+        state.MEM->setName("MEM");
 
         b.SetInsertPoint(bblocks["entry"]);
 
@@ -60,27 +60,36 @@ namespace hacklift {
         bblocks["EXIT"];
         //M[2] = M[0] + M[1]
         state.A = h.i16(0);
-        state.D = h.read_array(state.M, state.A);
+        state.D = h.read_array(state.MEM, state.A);
         state.A = h.i16(1);
-        state.D = h.op_sub(state.D, h.read_array(state.M, state.A));
+        state.D = h.op_sub(state.D, h.read_array(state.MEM, state.A));
         h.JGT(state.D, h.i16(0), bblocks["DGREATER"]);
         state.A = h.i16(1);
-        state.D = h.read_array(state.M, state.A);
+        state.D = h.read_array(state.MEM, state.A);
         state.A = h.i16(2);
         //state.D = h.read_array(state.M, state.A);
-        h.write_array(state.M, state.A, state.D);
+        h.write_array(state.MEM, state.A, state.D);
         state.A = h.i16(17);
         h.JMP(bblocks["EXIT"]);
 
         b.SetInsertPoint(bblocks["DGREATER"]);
         state.A = h.i16(0);
-        state.D = h.read_array(state.M, state.A);
+        state.D = h.read_array(state.MEM, state.A);
         state.A = h.i16(2);
-        h.write_array(state.M, state.A, state.D);
+        h.write_array(state.MEM, state.A, state.D);
         state.A = h.i16(17);
         b.CreateBr(bblocks["EXIT"]);
 
         b.SetInsertPoint(bblocks["EXIT"]);
+
+        auto keyboard_func_ptr = module.getOrInsertFunction("handle_keyboard", IntegerType::getVoidTy(ctx),
+                                                            IntegerType::getInt16PtrTy(ctx));
+        auto keyboard_func = cast<Function>(keyboard_func_ptr.getCallee());
+
+        //handle_keyboard();
+
+        ArrayRef<Value *> args = {state.MEM};
+        b.CreateCall(keyboard_func, args);
         b.CreateRetVoid();
 
 

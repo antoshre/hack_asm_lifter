@@ -20,10 +20,10 @@ namespace hacklift {
     void verify_module(llvm::Module &);
 
     int16_t run_int16_func(std::unique_ptr<Module>, std::unique_ptr<LLVMContext>, const std::string &,
-                           std::array<int16_t, 32768> &);
+                           std::array<int16_t, 32768> &, bool= true);
 
     void run_void_func(std::unique_ptr<Module>, std::unique_ptr<LLVMContext>, const std::string &,
-                       std::array<int16_t, 32768> &);
+                       std::array<int16_t, 32768> &, bool= true);
     //int run(std::unique_ptr<Module>&, const std::string& func_name, std::array<int16_t, 16>&);
 }
 

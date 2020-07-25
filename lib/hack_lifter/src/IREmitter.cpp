@@ -3,7 +3,7 @@
 //
 
 #include <llvm/Support/raw_ostream.h>
-#include "IREmitter.h"
+#include "hacklift/IREmitter.h"
 
 namespace hacklift {
 
@@ -15,6 +15,12 @@ namespace hacklift {
         //h.bldr.CreateLoad(m.A);
         //h.bldr.CreateStore(c, m.A);
         //m.A = h.i16(i.s.value);
+
+        if (i.s.value == 0x6000) {
+            std::vector<Value *> args;
+            args.push_back(m.MEM);
+            h.bldr.CreateCall(m.keyboard_update, args);
+        }
     }
 
     void IREmitter::operator()(const hackasm::L_Type &i) {

@@ -2,7 +2,7 @@
 // Created by rob on 7/18/2020.
 //
 
-#include "BlockMap.h"
+#include "hacklift/BlockMap.h"
 
 namespace hacklift {
     BasicBlock *BlockMap::operator[](int16_t v) {

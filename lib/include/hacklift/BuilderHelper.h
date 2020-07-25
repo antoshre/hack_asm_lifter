@@ -7,7 +7,7 @@
 
 #include "llvm/IR/IRBuilder.h"
 #include "llvm/IR/LLVMContext.h"
-#include "BlockCache.h"
+#include "hacklift/BlockCache.h"
 
 using namespace llvm;
 

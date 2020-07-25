@@ -15,9 +15,11 @@ set(SOURCES
         hack_lifter/src/BlockCache.cpp
         hack_lifter/testing/create_void_function.cpp
         hack_lifter/src/BlockMap.cpp
-        hack_lifter/testing/parse_asm.cpp
+        hack_lifter/src/parse_asm.cpp
         )
 
 add_library(hack_lifter ${SOURCES})
 target_link_libraries(hack_lifter PUBLIC hack_assembler LLVM)
-target_include_directories(hack_lifter PUBLIC hack_lifter/src ${LLVM_INCLUDE_DIRS})
+target_include_directories(hack_lifter PUBLIC include ${LLVM_INCLUDE_DIRS})
+
+add_library(hac_lifter_embedded hack_lifter/embed/embed.cpp)

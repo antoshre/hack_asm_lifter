@@ -7,7 +7,7 @@
 #include <llvm/Support/TargetSelect.h>
 #include <iostream>
 #include <iomanip>
-#include "ModuleTools.h"
+#include "hacklift/ModuleTools.h"
 #include "llvm/IR/Verifier.h"
 #include "llvm/Support/raw_ostream.h"
 #include "llvm/IR/IRPrintingPasses.h"
@@ -16,7 +16,7 @@
 #include "llvm/ExecutionEngine/Orc/ThreadSafeModule.h"
 
 #include "llvm/IR/AssemblyAnnotationWriter.h"
-
+//#include "hacklift/embed.h"
 using namespace llvm;
 
 namespace hacklift {
@@ -81,7 +81,7 @@ namespace hacklift {
 
     //TODO: de-duplicate these run functions.  Dynamically detect signature?  Template and forget?
     void run_void_func(std::unique_ptr<Module> mod, std::unique_ptr<LLVMContext> ctx, const std::string &fname,
-                       std::array<int16_t, 32768> &mem) {
+                       std::array<int16_t, 32768> &mem, bool print_results) {
         InitializeNativeTarget();
         InitializeNativeTargetAsmPrinter();
         InitializeNativeTargetAsmParser();
@@ -95,13 +95,24 @@ namespace hacklift {
             return;
         }
 
+        /*
+        auto& DL = JIT->get()->getDataLayout();
+        auto& JD = JIT->get()->getMainJITDylib();
+        orc::MangleAndInterner Mangle(JD.getExecutionSession(), DL);
+
+        orc::SymbolMap M;
+        M[Mangle("handle_keyboard")] = JITEvaluatedSymbol(pointerToJITTargetAddress(&handle_keyboard), JITSymbolFlags());
+        M[Mangle("handle_screen")] = JITEvaluatedSymbol(pointerToJITTargetAddress(&handle_screen), JITSymbolFlags());
+        cantFail(JD.define(orc::absoluteSymbols(M)));
+        */
+
         // Add the module.
         if (auto err = JIT->get()->addIRModule(orc::ThreadSafeModule(std::move(mod), std::move(ctx)))) {
             llvm::errs() << err;
             return;
         }
         // Look up the JIT'd code entry point.
-        auto sym = JIT->get()->lookup("f");
+        auto sym = JIT->get()->lookup(fname);
         if (!sym) {
             llvm::errs() << sym.takeError();
             return;
@@ -109,22 +120,26 @@ namespace hacklift {
 
         auto f = (void (*)(int16_t *)) sym.get().getAddress();
 
-        std::cout << "Memory before run:\n";
-        for (int i = 0; i < 16; i++) {
-            std::cout << std::hex << std::setw(4) << std::setfill('0') << mem[i] << ' ';
+        if (print_results) {
+            std::cout << "Memory before run:\n";
+            for (int i = 0; i < 16; i++) {
+                std::cout << std::hex << std::setw(4) << std::setfill('0') << mem[i] << ' ';
+            }
+            std::cout << '\n';
         }
-        std::cout << '\n';
-        //int16_t ret_val = f(mem.data());
+
         f(mem.data());
 
-        std::cout << "Memory after run:\n";
-        for (int i = 0; i < 16; i++) {
-            std::cout << std::hex << std::setw(4) << std::setfill('0') << mem[i] << ' ';
+        if (print_results) {
+            std::cout << "Memory after run:\n";
+            for (int i = 0; i < 16; i++) {
+                std::cout << std::hex << std::setw(4) << std::setfill('0') << mem[i] << ' ';
+            }
         }
     }
 
     int16_t run_int16_func(std::unique_ptr<Module> mod, std::unique_ptr<LLVMContext> ctx, const std::string &fname,
-                           std::array<int16_t, 16> &mem) {
+                           std::array<int16_t, 16> &mem, bool print_results) {
         InitializeNativeTarget();
         InitializeNativeTargetAsmPrinter();
         InitializeNativeTargetAsmParser();
@@ -143,6 +158,9 @@ namespace hacklift {
             llvm::errs() << err;
             return -2;
         }
+
+
+
         // Look up the JIT'd code entry point.
         auto sym = JIT->get()->lookup("f");
         if (!sym) {
@@ -150,21 +168,27 @@ namespace hacklift {
             return -3;
         }
 
+
         auto f = (int16_t(*)(int16_t *)) sym.get().getAddress();
 
-        std::cout << "Memory before run:\n";
-        for (int i = 0; i < 16; i++) {
-            std::cout << std::hex << std::setw(4) << std::setfill('0') << mem[i] << ' ';
+        if (print_results) {
+            std::cout << "Memory before run:\n";
+            for (int i = 0; i < 16; i++) {
+                std::cout << std::hex << std::setw(4) << std::setfill('0') << mem[i] << ' ';
+            }
+            std::cout << '\n';
         }
-        std::cout << '\n';
+
         int16_t ret_val = f(mem.data());
 
-        std::cout << "Memory after run:\n";
-        for (int i = 0; i < 16; i++) {
-            std::cout << std::hex << std::setw(4) << std::setfill('0') << mem[i] << ' ';
+        if (print_results) {
+            std::cout << "Memory after run:\n";
+            for (int i = 0; i < 16; i++) {
+                std::cout << std::hex << std::setw(4) << std::setfill('0') << mem[i] << ' ';
+            }
+            //std::cout << "\nReturned: " << std::hex << ret_val << '\n';
+            //return ret_val;
         }
-        //std::cout << "\nReturned: " << std::hex << ret_val << '\n';
-        //return ret_val;
         return ret_val;
     }
 
