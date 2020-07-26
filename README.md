@@ -31,7 +31,7 @@ Requires LLVM 10.  Currently I build and test on Linux; if you want to build on 
 
 See
 [`examples/translate_asm.cpp`](https://github.com/antoshre/hack_asm_lifter/blob/master/examples/translate_asm.cpp):
-```
+```cpp
 /*
  * Open the assembly file for reading.
  */
@@ -117,7 +117,7 @@ D=D+A //D=M[0]+M[1]
 M=D //M[2]=D
 ```
 LLVM IR:
-```
+```cpp
 /tmp/tmp.td8vzcShmB/cmake-build-debug/examples/translate_asm ../../examples/Add.asm
 Unoptimized: (8 insts)
 ; ModuleID = 'module'
