@@ -70,9 +70,7 @@ namespace hacklift {
             throw std::runtime_error("A isn't a ConstantInt");
         }
 
-        BasicBlock *target = bmap[val];
-
-        //if val == instruction location, it's a trivial infinite loop
+        //if val+1 == instruction location, it's a trivial infinite loop
         if (i.jump_mnemonic == "JMP" && i.inst_loc == val + 1) {
             //Trivial infinite loop detected,
             //throw std::runtime_error("Infinite loop detected, not currently handled");
@@ -80,6 +78,8 @@ namespace hacklift {
             //h.bldr.CreateRetVoid();
             return;
         }
+
+        BasicBlock *target = bmap[val];
 
         Value *jump;
         if (i.jump_mnemonic == "JGT") {

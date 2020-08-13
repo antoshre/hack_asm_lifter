@@ -59,6 +59,11 @@ int main(int argc, char **argv) {
     std::cout << "\nOptimized: (" << mod->getFunction("f")->getInstructionCount() << " insts)" << std::endl;
     hacklift::print_module(*mod);
 
+    std::cout << "Labels:\n";
+    for (const auto&[k, v] : ast.get_symbol_table().get_labels()) {
+        std::cout << k << " : " << v << '\n';
+    }
+
     /*
      * The generated IR assumes an int16_t* is passed in as a parameter,
      * this represents the "memory" for the transpiled program to work on.

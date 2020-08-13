@@ -21,9 +21,6 @@ namespace hacklift {
         auto keyboard_func = module.getOrInsertFunction("handle_keyboard", IntegerType::getVoidTy(ctx),
                                                         IntegerType::getInt16PtrTy(ctx));
         auto keyboard = cast<Function>(keyboard_func.getCallee());
-        auto screen_func = module.getOrInsertFunction("handle_screen", IntegerType::getVoidTy(ctx),
-                                                      IntegerType::getInt16PtrTy(ctx));
-        auto screen = cast<Function>(keyboard_func.getCallee());
 
         BlockCache bblocks(ctx, *foo);
         BlockMap blockmap{};
@@ -34,7 +31,6 @@ namespace hacklift {
 
         HackMachineState state{};
         state.keyboard_update = keyboard;
-        state.screen_update = screen;
 
         auto foo_args = foo->arg_begin();
         state.MEM = foo_args++;
