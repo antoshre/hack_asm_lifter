@@ -13,7 +13,7 @@ if (BUILD_EXAMPLES)
 endif ()
 
 option(BUILD_TESTING "Build tests" ON)
-if (CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_TESTING)
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_TESTING)
     add_subdirectory(external/googletest)
     add_subdirectory(tests)
 endif ()

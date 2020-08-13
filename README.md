@@ -9,9 +9,11 @@ This project relies on my [hackasm](https://github.com/antoshre/hack_asm_assembl
  
 ### Todo:
 * Handle keyboard input
-    - Stubs inserted for handling keyboard. Still need a cross-platform way to handle non-blocking terminal I/O.
+    - ~~Stubs inserted for handling keyboard. Still need a cross-platform way to handle non-blocking terminal I/O.~~
+    - The beginnings of support for keyboard is in [hack_embedded](https://github.com/antoshre/hack_embedded/).
 * Handle emulated screen output
-    - Screen stub inserted, not yet hooked up.
+    - ~~Screen stub inserted, not yet hooked up.~~
+    - Partial support in [hack_embedded](https://github.com/antoshre/hack_embedded/).  Need more/better test programs.
 
 Because writing to the screen memory is generally done with computed jumps and I can't support that statically,
 screen output likely won't be instrumented at the instruction level.  I'll spin up a thread and copy out the contents every few milliseconds
@@ -31,7 +33,7 @@ Requires LLVM 10.  Currently I build and test on Linux; if you want to build on 
 
 See
 [`examples/translate_asm.cpp`](https://github.com/antoshre/hack_asm_lifter/blob/master/examples/translate_asm.cpp):
-```
+```cpp
 /*
  * Open the assembly file for reading.
  */
@@ -117,7 +119,7 @@ D=D+A //D=M[0]+M[1]
 M=D //M[2]=D
 ```
 LLVM IR:
-```
+```cpp
 /tmp/tmp.td8vzcShmB/cmake-build-debug/examples/translate_asm ../../examples/Add.asm
 Unoptimized: (8 insts)
 ; ModuleID = 'module'
