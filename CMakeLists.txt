@@ -3,7 +3,7 @@ project(hack_lifter)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_subdirectory(external/hackasm)
+add_subdirectory(external)
 
 add_subdirectory(lib) #target: hack_lifter
 
@@ -14,6 +14,5 @@ endif ()
 
 option(BUILD_TESTING "Build tests" ON)
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_TESTING)
-    add_subdirectory(external/googletest)
     add_subdirectory(tests)
 endif ()
