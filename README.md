@@ -21,7 +21,7 @@ and live with that for the foreseeable future.
 
 ## Installation
 
-Clone the repo, grab the submodules with `git submodule update --init --recursive`
+Clone the repo, build with CMake.  External deps will be detected and pulled automatically if necessary.
 
 ## Requirements 
 
