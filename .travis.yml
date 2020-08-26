@@ -11,8 +11,6 @@ jobs:
           packages:
             - g++-10
             - llvm-10-dev
-            - llvm-10-dev-dbgsym
-            - llvm-10
             - clang-10
           sources:
             - ubuntu-toolchain-r-test #repo with g++ packages
