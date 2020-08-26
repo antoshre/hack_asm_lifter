@@ -3,6 +3,10 @@ project(hack_lifter_lib)
 
 find_package(LLVM REQUIRED CONFIG)
 
+message(STATUS "Found LLVM ${LLVM_PACKAGE_VERSION}")
+message(STATUS "Using LLVMConfig.cmake in: ${LLVM_DIR}")
+
+
 set(SOURCES
         hack_lifter/src/BuilderHelper.cpp
         hack_lifter/src/ModuleTools.cpp
@@ -16,3 +20,4 @@ set(SOURCES
 add_library(hack_lifter ${SOURCES})
 target_link_libraries(hack_lifter PUBLIC hack_assembler LLVM)
 target_include_directories(hack_lifter PUBLIC include ${LLVM_INCLUDE_DIRS})
+target_compile_definitions(hack_lifter PUBLIC ${LLVM_DEFINITIONS})
