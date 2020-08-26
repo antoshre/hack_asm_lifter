@@ -1,6 +1,8 @@
 # hack_asm_lifter
 ### LLVM IR Static Recompiler for Hack Assembly
 
+[![Build Status](https://travis-ci.com/antoshre/hack_asm_lifter.svg?branch=master)](https://travis-ci.com/antoshre/hack_asm_lifter)
+
 Hack is a toy assembly language created for the [nand2tetris](https://www.nand2tetris.org/) course.  The simple nature of the language makes it ideal for experimenting with building LLVM IR.
 
 The purpose of this project is to read in a Hack assembly file and convert it into LLVM IR.
@@ -21,7 +23,14 @@ and live with that for the foreseeable future.
 
 ## Installation
 
-Clone the repo, grab the submodules with `git submodule update --init --recursive`
+```
+git clone https://github.com/antoshre/hack_lifter
+cd hack_lifter
+mkdir build
+cd build
+cmake ..
+cmake --build . -DBUILD_EXAMPLES=ON -DBUILD_TESTING=ON
+```
 
 ## Requirements 
 
