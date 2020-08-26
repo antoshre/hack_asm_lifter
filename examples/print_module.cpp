@@ -7,7 +7,7 @@
 #include <array>
 #include <llvm/Support/raw_ostream.h>
 #include "hacklift/create_void_function.h"
-#include "../lib/hack_lifter/include/ModuleTools.h"
+#include "hacklift/ModuleTools.h"
 #include "llvm/ExecutionEngine/Orc/ThreadSafeModule.h"
 
 using namespace llvm;

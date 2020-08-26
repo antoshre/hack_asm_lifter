@@ -1,11 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
 project(hack_lifter_lib)
 
-#Force CMake to find most recent LLVM target
-SET(CMAKE_FIND_PACKAGE_SORT_ORDER NATURAL)
-SET(CMAKE_FIND_PACKAGE_SORT_DIRECTION DEC)
-
-find_package(LLVM REQUIRED CONFIG)
+find_package(LLVM "10.0.0" REQUIRED CONFIG)
 
 message(STATUS "Found LLVM ${LLVM_PACKAGE_VERSION}")
 message(STATUS "Using LLVMConfig.cmake in: ${LLVM_DIR}")
