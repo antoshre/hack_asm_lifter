@@ -24,8 +24,8 @@ and live with that for the foreseeable future.
 ## Installation
 
 ```
-git clone https://github.com/antoshre/hack_lifter
-cd hack_lifter
+git clone https://github.com/antoshre/hack_asm_lifter
+cd hack_asm_lifter
 mkdir build
 cd build
 cmake ..
