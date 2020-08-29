@@ -21,7 +21,7 @@ Because writing to the screen memory is generally done with computed jumps and I
 screen output likely won't be instrumented at the instruction level.  I'll spin up a thread and copy out the contents every few milliseconds
 and live with that for the foreseeable future.
 
-## Installation
+## Building
 
 ```
 git clone https://github.com/antoshre/hack_asm_lifter
