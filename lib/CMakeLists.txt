@@ -8,16 +8,18 @@ message(STATUS "Using LLVMConfig.cmake in: ${LLVM_DIR}")
 
 
 set(SOURCES
-        hack_lifter/src/BuilderHelper.cpp
-        hack_lifter/src/ModuleTools.cpp
-        hack_lifter/src/IREmitter.cpp
-        hack_lifter/src/BlockCache.cpp
-        hack_lifter/testing/create_void_function.cpp
-        hack_lifter/src/BlockMap.cpp
-        hack_lifter/src/parse_asm.cpp
+        src/BuilderHelper.cpp
+        src/ModuleTools.cpp
+        src/IREmitter.cpp
+        src/BlockCache.cpp
+        src/testing/create_void_function.cpp
+        src/BlockMap.cpp
+        src/parse_asm.cpp
         )
 
-add_library(hack_lifter ${SOURCES})
-target_link_libraries(hack_lifter PUBLIC hack_assembler LLVM)
-target_include_directories(hack_lifter PUBLIC include ${LLVM_INCLUDE_DIRS})
-target_compile_definitions(hack_lifter PUBLIC ${LLVM_DEFINITIONS})
+add_library(${PROJECT_NAME} ${SOURCES})
+target_link_libraries(${PROJECT_NAME} PUBLIC hack::assembler LLVM)
+target_include_directories(${PROJECT_NAME} PUBLIC include ${LLVM_INCLUDE_DIRS})
+target_compile_definitions(${PROJECT_NAME} PUBLIC ${LLVM_DEFINITIONS})
+
+add_library(hack::lifter ALIAS ${PROJECT_NAME})

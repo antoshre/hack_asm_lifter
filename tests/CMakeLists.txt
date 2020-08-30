@@ -1,13 +1,8 @@
 cmake_minimum_required(VERSION 3.15)
 project(hack_lifter_tests)
 
-#Disable GMock, it isn't used
-set(BUILD_GMOCK OFF CACHE BOOL "" FORCE)
-
 find_package(GTest)
-if (GTEST_FOUND)
-    #Local GoogleTest package found
-else ()
+if (NOT GTEST_FOUND)
     message(STATUS "GTest package not found, pulling from remote")
     #Make GTest targets available
     include(FetchContent)
@@ -22,8 +17,5 @@ else ()
     FetchContent_MakeAvailable(googletest)
 endif ()
 
-set(TEST_SOURCES
-        functional.cpp)
-
-add_executable(${PROJECT_NAME} ${TEST_SOURCES})
-target_link_libraries(${PROJECT_NAME} hack_lifter gtest gtest_main)
+add_executable(add_asm_functional add_asm.cpp)
+target_link_libraries(add_asm_functional hack::lifter gtest gtest_main)

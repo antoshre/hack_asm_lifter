@@ -82,14 +82,13 @@ namespace hacklift {
 
         b.SetInsertPoint(bblocks["EXIT"]);
 
-        auto keyboard_func_ptr = module.getOrInsertFunction("handle_keyboard", IntegerType::getVoidTy(ctx),
-                                                            IntegerType::getInt16PtrTy(ctx));
-        auto keyboard_func = cast<Function>(keyboard_func_ptr.getCallee());
+        //auto keyboard_func_ptr = module.getOrInsertFunction("handle_keyboard", IntegerType::getVoidTy(ctx), IntegerType::getInt16PtrTy(ctx));
+        //auto keyboard_func = cast<Function>(keyboard_func_ptr.getCallee());
 
         //handle_keyboard();
 
         ArrayRef<Value *> args = {state.MEM};
-        b.CreateCall(keyboard_func, args);
+        //b.CreateCall(keyboard_func, args);
         b.CreateRetVoid();
 
 

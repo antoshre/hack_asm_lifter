@@ -7,4 +7,4 @@ FetchContent_Declare(
         hackasm
         GIT_REPOSITORY https://github.com/antoshre/hack_asm_assembler.git
 )
-FetchContent_MakeAvailable(hackasm)
+FetchContent_MakeAvailable(hackasm) #Target: hack::assembler
