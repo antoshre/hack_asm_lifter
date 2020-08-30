@@ -44,7 +44,7 @@ script:
   - CC=/usr/bin/gcc-10
   - mkdir -p build
   - cd build
-  - cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF ..
+  - cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON -DBUILD_EXAMPLES=OFF ..
   - cmake --build .
   - cd tests
   #Convert Add.asm and run the object file
