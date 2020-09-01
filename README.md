@@ -107,9 +107,9 @@ hacklift::run_void_func(std::move(mod), std::move(ctx), "f", mem);
 return 0;
 ```
 
-[`lib/hack_lifter/src/IREmitter.cpp`](https://github.com/antoshre/hack_asm_lifter/blob/master/lib/hack_lifter/src/IREmitter.cpp)
+[`lib/src/IREmitter.cpp`](https://github.com/antoshre/hack_asm_lifter/blob/master/lib/src/IREmitter.cpp)
 and
-[`lib/hack_lifter/src/BuilderHelper.cpp`](https://github.com/antoshre/hack_asm_lifter/blob/master/lib/hack_lifter/src/BuilderHelper.cpp)
+[`lib/src/BuilderHelper.cpp`](https://github.com/antoshre/hack_asm_lifter/blob/master/lib/src/BuilderHelper.cpp)
 are the business-end of the translation.
 
 ## Example Output
